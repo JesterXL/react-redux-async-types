@@ -4,25 +4,39 @@ import Button from '@material-ui/core/Button'
 import Toolbar from '@material-ui/core/Toolbar'
 import { connect } from 'react-redux'
 import { loadFoodsThunk } from './LoadFoodsService'
+import { withStyles } from '@material-ui/core/styles' 
 
-const ToolbarView = ({ loadFoodsThunk }) => {
+const styles = {
+    root: {
+        flexGrow: 1,
+    },
+    grow: {
+        flexGrow: 1,
+    }
+}
+
+const ToolbarView = ({ classes, loadFoodsThunk, totalCalories }) => {
     return (
-        <AppBar position="static">
-            <Toolbar>
-            <Button color="inherit" onClick={loadFoodsThunk}>Reload</Button>
-            <Button color="inherit" color="secondary">Break</Button>
-            </Toolbar>
-        </AppBar>
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Toolbar>
+                    <p>Total Calories: {totalCalories}</p>
+                    <p className={classes.grow}>&nbsp;</p>
+                    <Button color="inherit" onClick={loadFoodsThunk}>Reload</Button>
+                    <Button color="inherit" color="secondary">Break</Button>
+                </Toolbar>
+            </AppBar>
+        </div>
     )
 }
 
 const mapStateToProps = state =>
-    state
+    ({ totalCalories: state.calories.totalCalories })
 
-const mapDispatchToProps =
-    { loadFoodsThunk }
+const mapDispatchToProps = dispatch =>
+    ({ loadFoodsThunk: loadFoodsThunk(dispatch) })
     
 export default connect(
     mapStateToProps
     , mapDispatchToProps
-)(ToolbarView)
+)(withStyles(styles)(ToolbarView))

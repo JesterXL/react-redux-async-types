@@ -7,6 +7,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper'
 import Checkbox from '@material-ui/core/Checkbox'
+import find from 'lodash/fp/find'
+import { containsFood } from './caloriesReducer'
 
 const styles = theme => ({
     root: {
@@ -19,10 +21,23 @@ const styles = theme => ({
     },
   })
 
-const handleChecked = () => {}
-  
-  const FoodList = ({ classes, foods, calories }) => {
+const findFoodByID = foods => id =>
+  find(
+    food => food.id === id
+    , foods
+  )
+const addRemoveFood = foods => addFood => removeFood => event => {
+  const checked = event.target.checked
+  const foodID = event.target.value
+  const food = findFoodByID(foods)(foodID)
+  if(checked) {
+    return addFood(food)
+  }
+  return removeFood(food)
+}
 
+  const FoodList = ({ classes, calories, foods, addFood, removeFood }) => {
+    
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -41,9 +56,9 @@ const handleChecked = () => {}
               <TableRow key={row.id}>
                 <TableCell>
                 <Checkbox
-                  checked={false}
-                  onChange={handleChecked('checkedA')}
-                  value="checkedA"
+                  checked={containsFood(calories.foods)(row.id)}
+                  onChange={addRemoveFood(foods)(addFood)(removeFood)}
+                  value={row.id}
                 />
                 </TableCell>
                 <TableCell component="th" scope="row">

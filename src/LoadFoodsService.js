@@ -3,7 +3,6 @@ import { loadFoods, loadFoodsFailure, loadFoodsSuccess } from './foodsReducer'
 export const fetchFoods = () =>
     fetch('/food/list')
     .then(response => {
-        console.log("response:", response.body)
         if(response.ok && response.status === 200) {
             return response.json()
         }
@@ -11,7 +10,7 @@ export const fetchFoods = () =>
     })
     .catch(error => console.log("loadFoods, error:", error))
 
-export const loadFoodsThunk = () => dispatch => {
+export const loadFoodsThunk = dispatch => () => {
     dispatch(loadFoods())
     fetchFoods()
     .then(foods =>

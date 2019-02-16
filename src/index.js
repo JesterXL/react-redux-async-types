@@ -7,10 +7,11 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
 import rootReducers from './reducers'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 
 ReactDOM.render(
-    <Provider store={createStore(rootReducers, applyMiddleware(thunk))}>
+    <Provider store={createStore(rootReducers, composeWithDevTools(applyMiddleware(thunk)))}>
         <App />
     </Provider>,
     document.getElementById('root')

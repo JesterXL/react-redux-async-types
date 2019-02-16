@@ -1,3 +1,5 @@
+import { find, reject, reduce } from 'lodash/fp'
+
 export const ADD_FOOD = 'ADD_FOOD'
 export const REMOVE_FOOD = 'REMOVE_FOOD'
 
@@ -7,28 +9,61 @@ export const addFood = food =>
 export const removeFood = food =>
     ({ type: REMOVE_FOOD, food })
 
+const findFood = foodID =>
+    find(
+        food => food.id === foodID
+    )
+
+export const containsFood = foods => foodID =>
+    findFood(foodID)(foods)
+    ? true
+    : false
+
+const addFoodIDNoDuplicates = foods => food =>
+    containsFood(foods)(food.id)
+    ? foods
+    : [...foods, food]
+
+const removeFoodIDFromFood = foods => foodToRemove =>
+    reject(
+        food => food.id === foodToRemove.id
+        , foods
+    )
+
+const updateMacros =
+    reduce(
+        (acc, food) => {
+            return {
+                totalCalories: acc.totalCalories + food.calories
+                , fat: acc.fat + food.fat
+                , carbs: acc.carbs + food.carbs
+                , protein: acc.protein + food.protein
+                }
+        }
+        , ({ totalCalories: 0, fat: 0, carbs: 0, protein: 0 })
+    )
+
 const defaultState = {
-    calories: 0
+    totalCalories: 0
     , fat: 0
     , carbs: 0
     , protein: 0
+    , foods: []
 }
+
 export const calories = (state=defaultState, action) => {
     switch(action.type) {
         case ADD_FOOD:
-            return {
-                calories: state.calories + action.food.calories
-                , fat: state.fat + action.food.fat
-                , carbs: state.carbs + action.food.carbs
-                , protein: state.protein + action.food.protein
-            }
+            const foodsAdded = addFoodIDNoDuplicates(state.foods)(action.food)
+            const macrosAdded = updateMacros(foodsAdded)
+            console.log("foodsAdded:", foodsAdded)
+            const result = { foods: foodsAdded, ...macrosAdded }
+            console.log("result:", result)
+            return result
         case REMOVE_FOOD:
-            return {
-                calories: state.calories - action.food.calories
-                , fat: state.fat - action.food.fat
-                , carbs: state.carbs - action.food.carbs
-                , protein: state.protein - action.food.protein
-            }
+            const foodsRemoved = removeFoodIDFromFood(state.foods)(action.food)
+            const macrosRemoved = updateMacros(foodsRemoved)
+            return { foods: foodsRemoved, ...macrosRemoved}
         default:
             return state
     }

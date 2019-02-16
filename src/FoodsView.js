@@ -4,29 +4,33 @@ import Failed from './Failed'
 import FoodsList from './FoodList'
 import { connect } from 'react-redux'
 import { loadFoodsThunk } from './LoadFoodsService'
+import { addFood, removeFood } from './caloriesReducer'
 
 const mapStateToProps = state =>
-    state.foods
+    ({ foods: state.foods, calories: state.calories })
 
-const mapDispatchToProps =
-    { loadFoodsThunk }
+const mapDispatchToProps = dispatch =>
+    ({
+        loadFoodsThunk: loadFoodsThunk(dispatch)
+        , addFood: food => dispatch(addFood(food))
+        , removeFood: food => dispatch(removeFood(food))
+    })
 
 const FoodsView = props => {
-    
     useEffect(() => {
         props.loadFoodsThunk()
     }, [])
 
-    if(props.isLoading) {
+    if(props.foods.isLoading) {
         return (<Loading />)
     }
     
-    if(props.isError) {
+    if(props.foods.isError) {
         return (<Failed />)
     }
 
     return (
-        <FoodsList foods={props.foods} />
+        <FoodsList foods={props.foods.foods} calories={props.calories} addFood={props.addFood} removeFood={props.removeFood} />
     )
 }
 
