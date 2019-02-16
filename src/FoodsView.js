@@ -26,7 +26,7 @@ const FoodsView = props => {
     }
     
     if(props.foods.isError) {
-        return (<Failed />)
+        return (<Failed error={props.foods.error}/>)
     }
 
     return (

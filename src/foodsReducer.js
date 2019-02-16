@@ -8,8 +8,8 @@ export const loadFoods = () =>
 export const loadFoodsSuccess = foods =>
     ({ type: LOAD_FOODS_SUCCESS, foods })
 
-export const loadFoodsFailure = () =>
-    ({ type: LOAD_FOODS_FAILURE })
+export const loadFoodsFailure = error =>
+    ({ type: LOAD_FOODS_FAILURE, error })
 
 const defaultState = {
     isLoading: true
