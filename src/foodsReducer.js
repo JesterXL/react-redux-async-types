@@ -8,6 +8,15 @@ const FoodsState = union('FoodsState', {
 .derive(derivations.debugRepresentation)
 const { FoodsLoading, FoodsLoaded, FoodsError } = FoodsState
 
+export const loadFoods = () =>
+    ({ type: LOAD_FOODS })
+
+export const loadFoodsSuccess = foods =>
+    ({ type: LOAD_FOODS_SUCCESS, foods })
+
+export const loadFoodsFailure = error =>
+    ({ type: LOAD_FOODS_FAILURE, error })
+
 const defaultState = {
     isLoading: true
     , error: undefined
