@@ -8,11 +8,28 @@ export const fetchFoods = () =>
         }
         return Promise.reject(new Error(response.statusText))
     })
-    .catch(error => console.log("loadFoods, error:", error))
+
+export const fetchFoodsFail = () =>
+    new Promise((success, failure) => {
+        setTimeout(() => {
+            failure(new Error('intentional b00m'))
+        }, 2000)
+    })
 
 export const loadFoodsThunk = dispatch => () => {
     dispatch(loadFoods())
     fetchFoods()
+    .then(foods =>
+        dispatch(loadFoodsSuccess(foods))
+    )
+    .catch(error =>
+        dispatch(loadFoodsFailure(error))    
+    )
+}
+
+export const loadFoodsFailThunk = dispatch => () => {
+    dispatch(loadFoods())
+    fetchFoodsFail()
     .then(foods =>
         dispatch(loadFoodsSuccess(foods))
     )
