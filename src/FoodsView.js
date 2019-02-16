@@ -21,17 +21,14 @@ const FoodsView = props => {
         props.loadFoodsThunk()
     }, [])
 
-    if(props.foods.isLoading) {
-        return (<Loading />)
-    }
-    
-    if(props.foods.isError) {
-        return (<Failed error={props.foods.error}/>)
-    }
-
-    return (
-        <FoodsList foods={props.foods.foods} calories={props.calories} addFood={props.addFood} removeFood={props.removeFood} />
-    )
+    return props.foods.matchWith({
+        LoadingFoods: () =>
+            (<Loading />)
+        , FoodsError: ({ error }) =>
+            (<Failed error={error} />)
+        , FoodsLoaded: ({ foods }) =>
+            (<FoodsList foods={foods} calories={props.calories} addFood={props.addFood} removeFood={props.removeFood} />)
+    })
 }
 
 export default connect(

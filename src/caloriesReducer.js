@@ -56,9 +56,7 @@ export const calories = (state=defaultState, action) => {
         case ADD_FOOD:
             const foodsAdded = addFoodIDNoDuplicates(state.foods)(action.food)
             const macrosAdded = updateMacros(foodsAdded)
-            console.log("foodsAdded:", foodsAdded)
             const result = { foods: foodsAdded, ...macrosAdded }
-            console.log("result:", result)
             return result
         case REMOVE_FOOD:
             const foodsRemoved = removeFoodIDFromFood(state.foods)(action.food)

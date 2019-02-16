@@ -1,12 +1,8 @@
 const { union, derivations } = require('folktale/adt/union')
 
-const FoodsState = union('FoodsState', {
-    FoodsLoading() { return {} }
-    , FoodsLoaded(foods) { return { foods } }
-    , FoodsError(error) { return { error } }
-})
-.derive(derivations.debugRepresentation)
-const { FoodsLoading, FoodsLoaded, FoodsError } = FoodsState
+const LOAD_FOODS = 'LOAD_FOODS'
+const LOAD_FOODS_FAILURE = 'LOAD_FOODS_FAILURE'
+const LOAD_FOODS_SUCCESS = 'LOAD_FOODS_SUCCESS'
 
 export const loadFoods = () =>
     ({ type: LOAD_FOODS })
@@ -17,38 +13,22 @@ export const loadFoodsSuccess = foods =>
 export const loadFoodsFailure = error =>
     ({ type: LOAD_FOODS_FAILURE, error })
 
-const defaultState = {
-    isLoading: true
-    , error: undefined
-    , isError: false
-    , foods: undefined
-}
-export const foods = (state=defaultState, action) => {
+export const FoodsState = union('FoodsState', {
+    LoadingFoods() { return {} }
+    , FoodsLoaded(foods) { return { foods } }
+    , FoodsError(error) { return { error } }
+})
+.derive(derivations.debugRepresentation)
+export const { LoadingFoods, FoodsLoaded, FoodsError } = FoodsState
+
+export const foods = (state=LoadingFoods(), action) => {
     switch(action.type) {
         case LOAD_FOODS:
-            return {
-                ...state
-                , isLoading: true
-                , isError: false
-                , error: undefined
-                , foods: undefined
-            }
+            return LoadingFoods()
         case LOAD_FOODS_FAILURE:
-            return {
-                ...state
-                , isLoading: false
-                , isError: true
-                , error: action.error
-                , foods: undefined
-            }
+            return FoodsError(action.error)
         case LOAD_FOODS_SUCCESS:
-            return {
-                ...state
-                , isLoading: false
-                , isError: false
-                , error: undefined
-                , foods: action.foods
-            }
+            return FoodsLoaded(action.foods)
         default:
             return state
     }
