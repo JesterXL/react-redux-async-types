@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import Toolbar from '@material-ui/core/Toolbar'
-import { connect } from 'react-redux'
 import { loadFoodsThunk, loadFoodsFailThunk } from './LoadFoodsService'
 import { withStyles } from '@material-ui/core/styles' 
+import { Store, Provider } from './store'
 
 const styles = {
     root: {
@@ -15,31 +15,22 @@ const styles = {
     }
 }
 
-const ToolbarView = ({ classes, loadFoodsThunk, loadFoodsFailThunk, totalCalories }) => {
+// loadFoodsThunk, loadFoodsFailThunk, totalCalories
+const ToolbarView = ({ classes }) => {
+    const { state, dispatch } = useContext(Store)
+    const { calories } = state
     return (
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
-                    <p>Total Calories: {totalCalories}</p>
+                    <p>Total Calories: {calories.totalCalories}</p>
                     <p className={classes.grow}>&nbsp;</p>
-                    <Button color="inherit" onClick={loadFoodsThunk}>Reload</Button>
-                    <Button color="secondary" onClick={loadFoodsFailThunk}>Break</Button>
+                    <Button color="inherit" onClick={loadFoodsThunk(dispatch)}>Reload</Button>
+                    <Button color="secondary" onClick={loadFoodsFailThunk(dispatch)}>Break</Button>
                 </Toolbar>
             </AppBar>
         </div>
     )
 }
 
-const mapStateToProps = state =>
-    ({ totalCalories: state.calories.totalCalories })
-
-const mapDispatchToProps = dispatch =>
-    ({ 
-        loadFoodsThunk: loadFoodsThunk(dispatch)
-        , loadFoodsFailThunk: loadFoodsFailThunk(dispatch)
-    })
-    
-export default connect(
-    mapStateToProps
-    , mapDispatchToProps
-)(withStyles(styles)(ToolbarView))
+export default withStyles(styles)(ToolbarView)

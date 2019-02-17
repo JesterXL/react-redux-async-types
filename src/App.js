@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+import { Store, Provider } from './store'
+
 import ToolbarView from './ToolbarView'
 import FoodsView from './FoodsView'
 
