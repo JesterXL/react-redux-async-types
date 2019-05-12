@@ -39,7 +39,7 @@ const addRemoveFood = foods => addFood => removeFood => event => {
   const FoodList = ({ classes, calories, foods, addFood, removeFood }) => {
     
     return (
-      <Paper className={classes.root}>
+      <Paper className={classes.root} data-cy-foods-table>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -56,6 +56,7 @@ const addRemoveFood = foods => addFood => removeFood => event => {
               <TableRow key={row.id}>
                 <TableCell>
                 <Checkbox
+                  data-cy-food-name={row.name}
                   checked={containsFood(calories.foods)(row.id)}
                   onChange={addRemoveFood(foods)(addFood)(removeFood)}
                   value={row.id}

@@ -20,9 +20,9 @@ const ToolbarView = ({ classes, loadFoodsThunk, loadFoodsFailThunk, totalCalorie
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
-                    <p>Total Calories: {totalCalories}</p>
+                    <p>Total Calories: <span data-cy-total-calories>{totalCalories}</span></p>
                     <p className={classes.grow}>&nbsp;</p>
-                    <Button color="inherit" onClick={loadFoodsThunk}>Reload</Button>
+                    <Button color="inherit" onClick={loadFoodsThunk} data-cy-button="reload">Reload</Button>
                     <Button color="secondary" onClick={loadFoodsFailThunk}>Break</Button>
                 </Toolbar>
             </AppBar>

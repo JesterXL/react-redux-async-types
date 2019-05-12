@@ -1,4 +1,5 @@
 import { loadFoods, loadFoodsFailure, loadFoodsSuccess } from './foodsReducer'
+import fetch from 'cross-fetch'
 
 export const fetchFoods = () =>
     fetch('/food/list')
