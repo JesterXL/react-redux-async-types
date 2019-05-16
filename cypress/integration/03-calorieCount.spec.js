@@ -14,8 +14,8 @@ describe('Calorie Count', () => {
         .contains('0')
       cy.get('[data-cy-food-name="Avacado"]')
         .click()
-    cy.get('[data-cy-total-calories]')
-        .contains('160')
+      cy.get('[data-cy-total-calories]')
+          .contains('160')
     
     })
   })

@@ -20,7 +20,7 @@ const FoodsView = props => {
     useEffect(() => {
         props.loadFoodsThunk()
     }, [])
-
+    
     return props.foods.matchWith({
         LoadingFoods: () =>
             (<Loading />)

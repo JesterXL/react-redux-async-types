@@ -12,7 +12,7 @@ describe('Load Foods', () => {
       cy.get('[data-cy-foods-table]')
         .should('exist')
     })
-    it('should show error screen when it fails', () => {
+  it('should show error screen when it fails', () => {
       cy.server()
       cy.route({
         method: 'GET',
@@ -25,4 +25,15 @@ describe('Load Foods', () => {
       cy.get('[data-cy-error-screen]')
         .should('exist')
     })
+    
   })
+  
+
+
+
+
+
+
+
+  
+  

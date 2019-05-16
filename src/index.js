@@ -8,6 +8,7 @@ import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
 import rootReducers from './reducers'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import 'typeface-roboto'
 
 
 ReactDOM.render(

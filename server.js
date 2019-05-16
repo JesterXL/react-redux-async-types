@@ -21,4 +21,10 @@ app.get('/food/list', (req, res) =>
     }, 2000)
 )
 
+app.post('/food/login', (req, res) =>
+    setTimeout(() => {
+        res.json({result: 'login success'})
+    }, 2000)
+)
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
