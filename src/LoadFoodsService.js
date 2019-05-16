@@ -1,9 +1,13 @@
 import { loadFoods, loadFoodsFailure, loadFoodsSuccess } from './foodsReducer'
 import fetch from 'cross-fetch'
+import { navigate } from '@reach/router'
 
 export const fetchFoods = () =>
     fetch('/food/list')
     .then(response => {
+        if(response.status === 401) {
+            return 'unauthorized'
+        }
         if(response.ok && response.status === 200) {
             return response.json()
         }
@@ -20,9 +24,14 @@ export const fetchFoodsFail = () =>
 export const loadFoodsThunk = dispatch => () => {
     dispatch(loadFoods())
     fetchFoods()
-    .then(foods =>
+    .then(foods => {
+        if(foods === 'unauthorized') {
+            dispatch(loadFoodsFailure(new Error('Unauthorized')))
+            navigate('/login')
+            return
+        }
         dispatch(loadFoodsSuccess(foods))
-    )
+    })
     .catch(error =>
         dispatch(loadFoodsFailure(error))    
     )

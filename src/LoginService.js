@@ -3,7 +3,7 @@ import fetch from 'cross-fetch'
 import { navigate } from '@reach/router'
 
 export const fetchLogin = username => password =>
-    fetch('/food/login', 
+    fetch('/login', 
     {
         method: 'POST',
         credentials: 'include',

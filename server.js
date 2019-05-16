@@ -1,9 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const uuidv4 = require('uuid/v4')
+const cookieParser = require('cookie-parser')
 
 const app = express()
 app.use(cors())
+app.use(cookieParser())
 const port = 9000
 
 const foods = [
@@ -15,16 +17,34 @@ const foods = [
 ]
 .map(food => ({ ...food, id: uuidv4() }))
 
-app.get('/food/list', (req, res) =>
-    setTimeout(() => {
-        res.json(foods)
-    }, 2000)
-)
+const validCookie = req => {
+    if(req.cookies && req.cookies.sessionid === '1') {
+        return true
+    }
+    return false
+}
 
-app.post('/food/login', (req, res) =>
+app.get('/food/list', (req, res) => {
+    console.log("food list:", req.cookies)
+    if(validCookie(req)) {
+        setTimeout(() => {
+            res.json(foods)
+        }, 2000)
+        return
+    }
+    return res.sendStatus(401)
+})
+
+app.post('/login', (req, res) =>
     setTimeout(() => {
+        res.cookie('sessionid', '1', { httpOnly: true, expires: new Date(Date.now() + 10000) })
         res.json({result: 'login success'})
     }, 2000)
 )
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('sessionid', { httpOnly: true, expires: new Date(Date.now() + 10000) })
+    res.json({result: 'logged out'})
+})
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
