@@ -37,7 +37,7 @@ const addRemoveFood = foods => addFood => removeFood => event => {
 }
 
   const FoodList = ({ classes, calories, foods, addFood, removeFood }) => {
-    
+    debugger
     return (
       <Paper className={classes.root} data-cy-foods-table>
         <Table className={classes.table}>

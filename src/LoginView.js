@@ -72,6 +72,7 @@ const loggedOutView = (classes, username, setUsername, password, setPassword, on
                 <Button
                     variant="contained" 
                     color="primary"
+                    data-cy-login-button
                     className={classes.loginButton}
                     onClick={() => onLogin(username)(password)}>Login</Button>
             </form>
@@ -111,6 +112,7 @@ const loginFailureView = (classes, username, setUsername, password, setPassword,
                 <Button
                     variant="contained" 
                     color="primary"
+                    data-cy-login-button
                     className={classes.loginButton}
                     onClick={() => onLogin(username)(password)}>Login</Button>
                 <h3 className={classes.loginFailureText}>Login Failed: {error.message}</h3>

@@ -28,7 +28,7 @@ const logoStyles = {
 }
 const ChickenLogo = () => {
     return (
-        <div style={logoStyles} data-cy-logo>
+        <div style={logoStyles}>
             <img src={ChickenImage} style={foodLogoStyles} alt="Food" />
             <span>Macro Counter</span>
         </div>
