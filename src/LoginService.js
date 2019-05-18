@@ -11,6 +11,8 @@ export const fetchLogin = username => password =>
         body: JSON.stringify({username, password})
     })
     .then(response => {
+        console.log("response.ok:", response.ok)
+        console.log("response.status:", response.status)
         if(response.ok && response.status === 200) {
             return response.json()
         }
@@ -30,6 +32,6 @@ export const loginThunk = dispatch => username => password => {
     )
 }
 
-export const logout = dispatch => () => {
-    dispatch(loggedOut())
-}
+// export const logout = dispatch => () => {
+//     dispatch(loggedOut())
+// }

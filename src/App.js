@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ToolbarView from './ToolbarView'
 import FoodsView from './FoodsView'
-import { Router} from "@reach/router"
+import { Router } from "@reach/router"
 import LoginView from './LoginView';
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
       <div className="App">
       <ToolbarView />
       <Router>
-        <LoginView path="login" />
+        <LoginView path="/" />
         <FoodsView path="foods" />
       </Router>
       </div>

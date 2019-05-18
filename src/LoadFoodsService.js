@@ -27,7 +27,7 @@ export const loadFoodsThunk = dispatch => () => {
     .then(foods => {
         if(foods === 'unauthorized') {
             dispatch(loadFoodsFailure(new Error('Unauthorized')))
-            navigate('/login')
+            navigate('/')
             return
         }
         dispatch(loadFoodsSuccess(foods))

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const app = express()
 app.use(cors())
 app.use(cookieParser())
+app.use(express.json())
 const port = 9000
 
 const foods = [
@@ -35,15 +36,34 @@ app.get('/food/list', (req, res) => {
     return res.sendStatus(401)
 })
 
-app.post('/login', (req, res) =>
+const validUser = req => {
+    if(req.body) {
+        if(req.body.username === 'cow' && req.body.password === 'moo'){
+            return true
+        }
+    }
+    return false
+}
+
+const getSessionTimeout = () =>
+    10 * 1000
+
+app.post('/login', (req, res) => {
+    if(validUser(req)) {
+        setTimeout(() => {
+            res.cookie('sessionid', '1', { httpOnly: true, expires: new Date(Date.now() + getSessionTimeout()) })
+            res.json({result: 'login success'})
+        }, 2000)
+        return
+    }
     setTimeout(() => {
-        res.cookie('sessionid', '1', { httpOnly: true, expires: new Date(Date.now() + 10000) })
-        res.json({result: 'login success'})
+        res.clearCookie('sessionid')
+        res.sendStatus(401)
     }, 2000)
-)
+})
 
 app.post('/logout', (req, res) => {
-    res.clearCookie('sessionid', { httpOnly: true, expires: new Date(Date.now() + 10000) })
+    res.clearCookie('sessionid', { httpOnly: true, expires: new Date(Date.now() + getSessionTimeout()) })
     res.json({result: 'logged out'})
 })
 

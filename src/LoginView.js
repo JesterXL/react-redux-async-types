@@ -24,6 +24,9 @@ const styles = theme => ({
     },
     loginButton: {
         marginTop: '2em'
+    },
+    loginFailureText: {
+        color: '#990000'
     }
   })
 
@@ -34,6 +37,17 @@ const mapDispatchToProps = dispatch =>
     ({
         onLogin: loginThunk(dispatch)
     })
+
+const onPasswordKeyDown = setPassword => login => event => {
+    
+    if(event.key === 'Enter') {
+        return [
+            setPassword(event.target.value),
+            login()
+        ]
+    }
+    return [setPassword(event.target.value)]
+}
 
 const loggedOutView = (classes, username, setUsername, password, setPassword, onLogin) => {
     return (
@@ -52,6 +66,7 @@ const loggedOutView = (classes, username, setUsername, password, setPassword, on
                     margin="normal"
                     type="password"
                     value={password}
+                    onKeyPress={onPasswordKeyDown(setPassword)(() => onLogin(username)(password))}
                     onChange={event => setPassword(event.target.value)}
                 />
                 <Button
@@ -73,7 +88,6 @@ const loggingInView = () => {
     )
 }
 
-
 const loginFailureView = (classes, username, setUsername, password, setPassword, onLogin, error) => {
     return (
         <div className={classes.mainParent}>
@@ -91,6 +105,7 @@ const loginFailureView = (classes, username, setUsername, password, setPassword,
                     margin="normal"
                     type="password"
                     value={password}
+                    onKeyPress={onPasswordKeyDown(setPassword)(() => onLogin(username)(password))}
                     onChange={event => setPassword(event.target.value)}
                 />
                 <Button
@@ -98,7 +113,7 @@ const loginFailureView = (classes, username, setUsername, password, setPassword,
                     color="primary"
                     className={classes.loginButton}
                     onClick={() => onLogin(username)(password)}>Login</Button>
-                <h3>Login Failed: {error}</h3>
+                <h3 className={classes.loginFailureText}>Login Failed: {error.message}</h3>
             </form>
         </div>
     )
@@ -122,12 +137,16 @@ const LoginView = props => {
 
     return props.login.matchWith({
         LoggedOut: () => 
+            console.log("1. LoggedOutView") ||
             loggedOutView(classes, username, setUsername, password, setPassword, props.onLogin),
         LoggingIn: () => 
+            console.log("2. loggingInView") ||
             loggingInView(),
         LoginSuccess: () => 
+            console.log("3. loginSuccessView") ||
             loginSuccessView(),
         LoginError: ({ error }) =>
+            console.log("4. loginFailureView") ||
             loginFailureView(classes, username, setUsername, password, setPassword, props.onLogin, error)
     })
 }
